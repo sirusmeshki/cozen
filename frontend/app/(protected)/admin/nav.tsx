@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 const Nav = () => {
-  const pages = ['users', 'orders', 'collections'];
+  const pages = ['collections', 'users', 'orders'];
   const currentPath = usePathname();
 
   return (
