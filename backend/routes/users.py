@@ -52,7 +52,41 @@ def add_user():
 
 
 
+
 @users_routes.route("/api/users", methods=["GET"])
+@jwt_required()
+def get_users():
+    identity = get_jwt_identity()  
+    claims = get_jwt()
+
+    if claims.get("role") != "admin":
+        return jsonify({"message": "Access forbidden, admin role required"}), 403
+    
+    try:
+        users = db.execute("SELECT * FROM users")
+        return jsonify(users), 200
+    except Exception as e:
+        logging.error(f"Error occurred: {e}")
+        return jsonify({"message": "An error occurred while loading the users"}), 500
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@users_routes.route("/api/collections", methods=["GET"])
 @jwt_required()
 def get_user_tshirts():
     id = get_jwt_identity()
@@ -84,7 +118,7 @@ def get_user_tshirts():
         JOIN Tshirts t ON o.tshirt_id = t.id
         WHERE o.owner_id = ?
         """, id)
-        
+
         for tshirt in tshirt_data:
             tshirt['tshirt_image_url'] = f"/uploads/tshirts/{tshirt['tshirt_image_path']}"
             tshirt['formatted_number'] = f"{tshirt['Tshirt_number']} of {tshirt['tshirt_max_number']}"
