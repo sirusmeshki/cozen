@@ -16,7 +16,9 @@ def create_tables():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT,
             sizes INTEGER,
-            collabration_with TEXT
+            collabration_with TEXT,
+            max_number INTEGER NOT NULL,
+            image_path TEXT NOT NULL
         )
     """)
 

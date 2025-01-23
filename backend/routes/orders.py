@@ -39,12 +39,15 @@ def add_order():
     try:
         
         owner=db.execute("SELECT * FROM users WHERE phone_number = ?", owner_number)
+        if not owner:
+            return jsonify({"message": "Invalid owner number"}), 400
         owner_id=owner[0]["id"]
 
         if not owner:
             return jsonify({"message": "Invalid owner_id "}), 400
         
         tshirt_id = db.execute("select id from tshirts where name = ? ",tshirt_name)
+        print(f"tshirt_id is {tshirt_id}")
         if not tshirt_id:
             return jsonify({"message":"tshirt doesnt exists"}),404
         tshirt_id=tshirt_id[0]["id"]
@@ -56,6 +59,7 @@ def add_order():
     
     except Exception as e:
         logging.error(e)
+        print(e)
         return jsonify({"message": "An unexpected error occurred while placing the order"}),500
         
     
@@ -83,6 +87,7 @@ def get_order():
             o.order_date,
             o.Tshirt_number,
             t.name AS tshirt_name,
+            t.max_number as tshirt_max_number,
             o.Tshirt_size
         FROM orders o
         JOIN users u ON o.owner_id = u.id

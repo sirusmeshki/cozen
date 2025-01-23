@@ -75,6 +75,8 @@ def get_user_tshirts():
         tshirt_data = db.execute("""
         SELECT 
             t.name AS tshirt_name,
+            t.image_path AS tshirt_image_path,
+            t.max_number AS tshirt_max_number,
             o.tshirt_number AS Tshirt_number,
             o.Tshirt_size,
             o.order_date
@@ -82,28 +84,28 @@ def get_user_tshirts():
         JOIN Tshirts t ON o.tshirt_id = t.id
         WHERE o.owner_id = ?
         """, id)
+        
+        for tshirt in tshirt_data:
+            tshirt['tshirt_image_url'] = f"/uploads/tshirts/{tshirt['tshirt_image_path']}"
+            tshirt['formatted_number'] = f"{tshirt['Tshirt_number']} of {tshirt['tshirt_max_number']}"
 
+        response = {
+            "user": user_data[0] if user_data else {},
+            "tshirts": tshirt_data
+        }
+
+        Config.cache.set(f"user_tshirts_{id}", response)
+        return jsonify(response), 200
     except Exception as e:
-        logging.error(f"error:{e}")
-        return jsonify({"message": "An error occurred"}), 500
+        print(e)
+        logging.error(f"Error loading user T-shirts: {e}")
+        return jsonify({"message": "An error occurred while loading user T-shirts"}), 500
 
-    user = user_data[0]  
-    user_profile = {
-        "first_name": user['name'],
-        "last_name": user['last_name'],
-        "phone_number": user['phone_number']
-    }
 
-    
-    data_to_cache = {
-        "user_profile": user_profile,
-        "orders": tshirt_data
-    }
-    
-    Config.cache.set(f"user_tshirts_{id}", data_to_cache, timeout=600) 
-    print("data cached")
 
-    return jsonify(data_to_cache)
+
+
+
 
 
 @users_routes.route("/api/users", methods=["DELETE"])
