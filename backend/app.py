@@ -7,8 +7,11 @@ import logging
 from dotenv import load_dotenv
 import os
 from config import Config
+from flask import send_from_directory
 
 
+UPLOAD_FOLDER =os.path.join(os.path.dirname(__file__), "uploads")
+STATIC_URL_PATH = "/static/uploads/tshirts"
 load_dotenv()
 app_secret_key = os.getenv("APP_SECRET_KEY")
 jwt_secret_key = os.getenv("JWT_SECRET_KEY")
@@ -19,6 +22,10 @@ app = Flask(__name__)
 app.config.from_object(Config) 
 
 Config.cache.init_app(app)
+@app.route(f'{STATIC_URL_PATH}/<path:filename>')
+def uploaded_file(filename):
+    return send_from_directory(UPLOAD_FOLDER, filename)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['CACHE_KEY_PREFIX'] = 'myapp_'
 app.config['SECRET_KEY'] = app_secret_key
 app.config['JWT_SECRET_KEY'] = jwt_secret_key

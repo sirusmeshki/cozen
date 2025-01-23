@@ -1,15 +1,16 @@
 from flask import Blueprint, request, jsonify
 from db import db
-from .utils import fieldcheck,allowed_file
+from .utils import fieldcheck,allowed_file,create_upload_path
 import logging
 from flask_jwt_extended import  jwt_required ,get_jwt_identity,get_jwt
 from werkzeug.utils import secure_filename
 import os
-
+from datetime import datetime
 
 tshirts_routes = Blueprint('tshirts', __name__)
 
 UPLOAD_FOLDER = db_path = os.path.join(os.path.dirname(__file__), "uploads")
+STATIC_URL_PATH = "/static/uploads/tshirts" 
 print(f"upload folder is {UPLOAD_FOLDER}")
 
 
@@ -28,13 +29,16 @@ def add_shirt():
 
     if 'file' not in request.files:
         return jsonify({"message": "No file part"}), 400
+    
     file = request.files['file']
     if file.filename == '':
         return jsonify({"message": "No selected file"}), 400
+    
     if file and allowed_file(file.filename):
+        upload_path = create_upload_path()
         filename = secure_filename(file.filename)
-        file.save(os.path.join(UPLOAD_FOLDER, filename))
-        image_path = os.path.join(UPLOAD_FOLDER, filename)
+        file.save(os.path.join(upload_path, filename))
+        image_url = os.path.join(STATIC_URL_PATH, str(datetime.now().year), str(datetime.now().month), str(datetime.now().day), filename)
     else:
         return jsonify({"message": "Invalid file type"}), 400
 
@@ -50,7 +54,7 @@ def add_shirt():
         if tshirt_exists:
             return jsonify({"message":"tshirt already exists"})
         db.execute("INSERT INTO Tshirts (id, name, sizes, collabration_with, image_path,max_number) VALUES (?, ?, ?, ?, ?,?)",
-                   tshirt_id, name, sizes, collabration_with, image_path,max_number)
+                   tshirt_id, name, sizes, collabration_with, image_url,max_number)
     except Exception as e:
         logging.error(f"Error adding shirt: {e}")
         return jsonify({"message": "An error occurred while adding the shirt"}), 500
