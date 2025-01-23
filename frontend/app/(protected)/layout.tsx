@@ -1,10 +1,10 @@
 import type { Metadata } from 'next';
 
 import CozenLogo from '../assets/icon/cozen-logo';
-// import { Ravi } from '../assets/font';
+import { Ravi } from '../assets/font';
 
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
+import { ModeToggle } from '@/components/mode-toggle';
 
 export const metadata: Metadata = {
   title: 'C⨀ZEN | PANEL',
@@ -19,14 +19,12 @@ export default function RootLayout({
   return (
     <main
       className={cn(
+        Ravi.className,
         'mx-auto flex h-full flex-col gap-3 p-3 xs:gap-6 xs:p-6 sm:gap-9 sm:p-9'
       )}>
       <header className="flex items-center justify-between">
         <CozenLogo />
-
-        <Button size="icon" variant="outline">
-          B
-        </Button>
+        <ModeToggle />
       </header>
 
       {children}
