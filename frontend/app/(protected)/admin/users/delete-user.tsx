@@ -24,20 +24,19 @@ import {
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
-import { deleteCollectionSchema } from './utils';
+import { deleteUserSchema } from './utils';
 
 import { Trash2 } from 'lucide-react';
 
-const DeleteCollection = () => {
-  const form = useForm<z.infer<typeof deleteCollectionSchema>>({
-    resolver: zodResolver(deleteCollectionSchema),
+const DeleteUser = () => {
+  const form = useForm<z.infer<typeof deleteUserSchema>>({
+    resolver: zodResolver(deleteUserSchema),
     defaultValues: {
-      id: '',
-      name: '',
+      phone_number: '',
     },
   });
 
-  function onSubmit(values: z.infer<typeof deleteCollectionSchema>) {
+  function onSubmit(values: z.infer<typeof deleteUserSchema>) {
     console.log(values);
   }
 
@@ -56,25 +55,12 @@ const DeleteCollection = () => {
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               <FormField
                 control={form.control}
-                name="id"
+                name="phone_number"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Id</FormLabel>
+                    <FormLabel>Phone Number</FormLabel>
                     <FormControl>
-                      <Input placeholder="1" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Flying Dreams" {...field} />
+                      <Input placeholder="0912 --- ----" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -91,4 +77,4 @@ const DeleteCollection = () => {
   );
 };
 
-export default DeleteCollection;
+export default DeleteUser;

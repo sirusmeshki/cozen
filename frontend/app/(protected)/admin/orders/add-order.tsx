@@ -24,22 +24,22 @@ import {
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
-import { addCollectionSchema } from './utils';
+import { addOrderSchema } from './utils';
 
 import { CirclePlus } from 'lucide-react';
 
-const AddCollection = () => {
-  const form = useForm<z.infer<typeof addCollectionSchema>>({
-    resolver: zodResolver(addCollectionSchema),
+const AddOrder = () => {
+  const form = useForm<z.infer<typeof addOrderSchema>>({
+    resolver: zodResolver(addOrderSchema),
     defaultValues: {
-      id: '',
-      name: '',
-      sizes: '',
-      collabration_with: '',
+      owner_number: '',
+      tshirt_number: '',
+      tshirt_name: '',
+      tshirt_size: '',
     },
   });
 
-  function onSubmit(values: z.infer<typeof addCollectionSchema>) {
+  function onSubmit(values: z.infer<typeof addOrderSchema>) {
     console.log(values);
   }
 
@@ -53,17 +53,17 @@ const AddCollection = () => {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Add Collection</DialogTitle>
+          <DialogTitle>Add Order</DialogTitle>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               <FormField
                 control={form.control}
-                name="id"
+                name="owner_number"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Id</FormLabel>
+                    <FormLabel>Owner Number</FormLabel>
                     <FormControl>
-                      <Input placeholder="1" {...field} />
+                      <Input placeholder="0912 --- -- --" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -71,12 +71,12 @@ const AddCollection = () => {
               />
               <FormField
                 control={form.control}
-                name="name"
+                name="tshirt_number"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Name</FormLabel>
+                    <FormLabel>T-Shirt Number</FormLabel>
                     <FormControl>
-                      <Input placeholder="name" {...field} />
+                      <Input placeholder="40" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -84,23 +84,10 @@ const AddCollection = () => {
               />
               <FormField
                 control={form.control}
-                name="sizes"
+                name="tshirt_name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Sizes</FormLabel>
-                    <FormControl>
-                      <Input placeholder="1,2,3" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="collabration_with"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Collabration</FormLabel>
+                    <FormLabel>T-Shirt Name</FormLabel>
                     <FormControl>
                       <Input placeholder="3Gool" {...field} />
                     </FormControl>
@@ -108,7 +95,20 @@ const AddCollection = () => {
                   </FormItem>
                 )}
               />
-              <Button type="submit">Submit</Button>
+              <FormField
+                control={form.control}
+                name="tshirt_size"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>T-Shirt Size</FormLabel>
+                    <FormControl>
+                      <Input placeholder="3" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button type="submit">Add</Button>
             </form>
           </Form>
         </DialogHeader>
@@ -117,4 +117,4 @@ const AddCollection = () => {
   );
 };
 
-export default AddCollection;
+export default AddOrder;

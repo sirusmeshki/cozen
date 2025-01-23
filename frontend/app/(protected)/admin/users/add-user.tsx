@@ -24,22 +24,21 @@ import {
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
-import { addCollectionSchema } from './utils';
+import { addUserSchema } from './utils';
 
 import { CirclePlus } from 'lucide-react';
 
-const AddCollection = () => {
-  const form = useForm<z.infer<typeof addCollectionSchema>>({
-    resolver: zodResolver(addCollectionSchema),
+const AddUser = () => {
+  const form = useForm<z.infer<typeof addUserSchema>>({
+    resolver: zodResolver(addUserSchema),
     defaultValues: {
-      id: '',
       name: '',
-      sizes: '',
-      collabration_with: '',
+      last_name: '',
+      phone_number: '',
     },
   });
 
-  function onSubmit(values: z.infer<typeof addCollectionSchema>) {
+  function onSubmit(values: z.infer<typeof addUserSchema>) {
     console.log(values);
   }
 
@@ -53,30 +52,17 @@ const AddCollection = () => {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Add Collection</DialogTitle>
+          <DialogTitle>Add User</DialogTitle>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              <FormField
-                control={form.control}
-                name="id"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Id</FormLabel>
-                    <FormControl>
-                      <Input placeholder="1" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
               <FormField
                 control={form.control}
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Name</FormLabel>
+                    <FormLabel>First Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="name" {...field} />
+                      <Input placeholder="John" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -84,12 +70,12 @@ const AddCollection = () => {
               />
               <FormField
                 control={form.control}
-                name="sizes"
+                name="last_name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Sizes</FormLabel>
+                    <FormLabel>Last Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="1,2,3" {...field} />
+                      <Input placeholder="Doe" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -97,18 +83,18 @@ const AddCollection = () => {
               />
               <FormField
                 control={form.control}
-                name="collabration_with"
+                name="phone_number"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Collabration</FormLabel>
+                    <FormLabel>Phone Number</FormLabel>
                     <FormControl>
-                      <Input placeholder="3Gool" {...field} />
+                      <Input placeholder="0912 --- ---" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <Button type="submit">Submit</Button>
+              <Button type="submit">Add</Button>
             </form>
           </Form>
         </DialogHeader>
@@ -117,4 +103,4 @@ const AddCollection = () => {
   );
 };
 
-export default AddCollection;
+export default AddUser;
