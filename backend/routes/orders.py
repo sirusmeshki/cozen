@@ -86,6 +86,7 @@ def get_order():
             u.phone_number AS user_number,
             o.order_date,
             o.Tshirt_number,
+            o.id AS order_id,
             t.name AS tshirt_name,
             t.max_number as tshirt_max_number,
             o.Tshirt_size
