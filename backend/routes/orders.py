@@ -27,30 +27,30 @@ def add_order():
     if not data:
         return jsonify({"message": "Invalid request, missing fields"}), 400
     
-    field_error=fieldcheck(data,"owner_number", "tshirt_number", "tshirt_size")
+    field_error=fieldcheck(data,"user_number", "tshirt_number", "tshirt_size","tshirt_id")
     if field_error:
         return field_error
 
-    owner_number = data["owner_number"]
+    owner_number = data["user_number"]
     tshirt_number = data["tshirt_number"]  
-    tshirt_name=data["tshirt_name"]            #jasem chejoori mikhad etelaato bezane ??????????  # faghat shomare user ba etelaate tshirt ? 
+    tshirt_id=data["tshirt_id"]           
     tshirt_size = data["tshirt_size"] 
 
     try:
         
         owner=db.execute("SELECT * FROM users WHERE phone_number = ?", owner_number)
         if not owner:
-            return jsonify({"message": "Invalid owner number"}), 400
+            return jsonify({"message": "Invalid user number"}), 400
         owner_id=owner[0]["id"]
 
         if not owner:
-            return jsonify({"message": "Invalid owner_id "}), 400
+            return jsonify({"message": "Invalid user_id "}), 400
         
-        tshirt_id = db.execute("select id from tshirts where name = ? ",tshirt_name)
+    
         print(f"tshirt_id is {tshirt_id}")
         if not tshirt_id:
             return jsonify({"message":"tshirt doesnt exists"}),404
-        tshirt_id=tshirt_id[0]["id"]
+        
         order_exists=db.execute("select * from orders where tshirt_id = ? and tshirt_number = ?",tshirt_id,tshirt_number)
         if order_exists:
             return jsonify({"message":"order already exists"})

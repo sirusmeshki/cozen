@@ -6,12 +6,14 @@ import logging
 from flask_jwt_extended import  jwt_required ,get_jwt_identity, get_jwt
 from config import Config
 
+import os 
 
-
-
+UPLOAD_FOLDER = r"D:\Downloads\projects\finalcozen\cozen\backend\routes\uploads"
+STATIC_URL_PATH = "/static/uploads"
 
 
 users_routes = Blueprint('users', __name__)
+
 
 
 
@@ -74,44 +76,37 @@ def get_users():
 
 
 
+import os
 
-
-
-
-
-
-
-
-
-
-
+UPLOAD_FOLDER = 'uploads/tshirts'
+STATIC_URL_PATH = '/static/uploads/tshirts'
 
 @users_routes.route("/api/collections", methods=["GET"])
 @jwt_required()
 def get_user_tshirts():
     id = get_jwt_identity()
 
-    if not id :
-        return jsonify({"message": "Access denied"}), 403  
-    
+    if not id:
+        return jsonify({"message": "Access denied"}), 403
+
     cached_data = Config.cache.get(f"user_tshirts_{id}")
-    print(f"cached fata = {cached_data}")
+    print(f"cached data = {cached_data}")
     if cached_data:
         return jsonify(cached_data)
 
     try:
-        
         user_data = db.execute("""
         SELECT name, last_name, phone_number
         FROM users
         WHERE id = ?
         """, id)
+
         tshirt_data = db.execute("""
         SELECT 
             t.name AS tshirt_name,
             t.image_path AS tshirt_image_path,
             t.max_number AS tshirt_max_number,
-            o.tshirt_number AS Tshirt_number,
+            o.Tshirt_number AS tshirt_number,
             o.Tshirt_size,
             o.order_date
         FROM orders o
@@ -120,8 +115,11 @@ def get_user_tshirts():
         """, id)
 
         for tshirt in tshirt_data:
-            tshirt['tshirt_image_url'] = f"/uploads/tshirts/{tshirt['tshirt_image_path']}"
-            tshirt['formatted_number'] = f"{tshirt['Tshirt_number']} of {tshirt['tshirt_max_number']}"
+            # Construct the relative URL correctly
+            relative_path = os.path.relpath(tshirt['tshirt_image_path'], UPLOAD_FOLDER).replace("\\", "/")
+            tshirt['tshirt_image_url'] = f"{STATIC_URL_PATH}/{relative_path}"
+            tshirt['formatted_number'] = f"{tshirt['tshirt_number']} of {tshirt['tshirt_max_number']}"
+            del tshirt['tshirt_image_path']  # Remove the file path from the response
 
         response = {
             "user": user_data[0] if user_data else {},
@@ -134,11 +132,6 @@ def get_user_tshirts():
         print(e)
         logging.error(f"Error loading user T-shirts: {e}")
         return jsonify({"message": "An error occurred while loading user T-shirts"}), 500
-
-
-
-
-
 
 
 
