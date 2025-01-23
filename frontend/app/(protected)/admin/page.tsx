@@ -1,9 +1,7 @@
 const AdminPage = () => {
   return (
     <section>
-      {/* Actions */}
-
-      {/* Table */}
+      <h1 className="font-bold">Click Nav Buttons To Change Pages</h1>
     </section>
   );
 };

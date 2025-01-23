@@ -2,12 +2,7 @@
 
 import { ColumnDef } from '@tanstack/react-table';
 
-export type Collection = {
-  id: string;
-  name: string;
-  sizes: string;
-  collabration_with: string;
-};
+import { Collection } from './utils';
 
 export const collections: Collection[] = [
   {

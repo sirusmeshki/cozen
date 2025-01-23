@@ -70,6 +70,7 @@ export function DataTable<TData, TValue>({
   return (
     <div>
       <div className="flex items-center py-4">
+        {/* Search Input */}
         <Input
           placeholder={`Search ${searchQuery}`}
           value={
@@ -80,6 +81,8 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm p-2 text-sm"
         />
+
+        {/* Add or Remove Columns */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
@@ -106,6 +109,8 @@ export function DataTable<TData, TValue>({
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+
+      {/* Table Content */}
       <div className="rounded-md border">
         <Table>
           <TableHeader>

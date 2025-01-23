@@ -1,15 +1,11 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
-import { ColumnDef } from '@tanstack/react-table';
 import { ArrowUpDown } from 'lucide-react';
 
-export type User = {
-  id: string;
-  name: string;
-  last_name: string;
-  phone_number: string;
-};
+import { Button } from '@/components/ui/button';
+import { ColumnDef } from '@tanstack/react-table';
+
+import { User } from './utils';
 
 export const users: User[] = [
   {

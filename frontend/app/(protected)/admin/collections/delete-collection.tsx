@@ -1,9 +1,10 @@
 'use client';
 
-import { z } from 'zod';
-
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+
+import { Trash2 } from 'lucide-react';
 
 import {
   Dialog,
@@ -21,12 +22,11 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
 import { deleteCollectionSchema } from './utils';
-
-import { Trash2 } from 'lucide-react';
 
 const DeleteCollection = () => {
   const form = useForm<z.infer<typeof deleteCollectionSchema>>({
@@ -38,6 +38,7 @@ const DeleteCollection = () => {
   });
 
   function onSubmit(values: z.infer<typeof deleteCollectionSchema>) {
+    // TODO: Delete Collection Route
     console.log(values);
   }
 

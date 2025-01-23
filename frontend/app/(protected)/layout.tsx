@@ -1,10 +1,10 @@
 import type { Metadata } from 'next';
 
-import CozenLogo from '../assets/icon/cozen-logo';
-
 import { cn } from '@/lib/utils';
 import { ModeToggle } from '@/components/mode-toggle';
 import { ThemeProvider } from '@/components/theme-provider';
+
+import CozenLogo from '../assets/icon/cozen-logo';
 
 export const metadata: Metadata = {
   title: 'C⨀ZEN | PANEL',

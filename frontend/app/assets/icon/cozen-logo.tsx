@@ -1,31 +1,30 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
+import Link from 'next/link';
+import { useTheme } from 'next-themes';
+import { useEffect, useState } from 'react';
 
 export default function CozenLogo({ className }: { className?: string }) {
-  const [color, setColor] = useState("#111");
+  const [color, setColor] = useState('#111');
   const { resolvedTheme } = useTheme();
 
   useEffect(() => {
-    if (resolvedTheme === "dark") {
-      setColor("#FFFFFF");
+    if (resolvedTheme === 'dark') {
+      setColor('#FFFFFF');
     } else {
-      setColor("#000000");
+      setColor('#000000');
     }
   }, [resolvedTheme]);
 
   return (
-    <Link href="/">
+    <Link href="/" className="w-fit">
       <svg
         className={className}
         width="60"
         height="60"
         viewBox="0 0 60 60"
         fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
+        xmlns="http://www.w3.org/2000/svg">
         <g mask="url(#mask0_187_331)">
           <path
             d="M30.0343 38.5884C34.7587 38.5884 38.5885 34.7586 38.5885 30.0342C38.5885 25.3098 34.7587 21.48 30.0343 21.48C25.3099 21.48 21.4801 25.3098 21.4801 30.0342C21.4801 34.7586 25.3099 38.5884 30.0343 38.5884Z"

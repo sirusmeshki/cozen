@@ -1,9 +1,10 @@
 'use client';
 
-import { z } from 'zod';
-
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+
+import { Trash2 } from 'lucide-react';
 
 import {
   Dialog,
@@ -21,12 +22,11 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
 import { deleteUserSchema } from './utils';
-
-import { Trash2 } from 'lucide-react';
 
 const DeleteUser = () => {
   const form = useForm<z.infer<typeof deleteUserSchema>>({
@@ -37,6 +37,7 @@ const DeleteUser = () => {
   });
 
   function onSubmit(values: z.infer<typeof deleteUserSchema>) {
+    // TODO: Delete User From List Route
     console.log(values);
   }
 

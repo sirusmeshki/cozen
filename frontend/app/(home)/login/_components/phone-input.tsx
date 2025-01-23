@@ -4,11 +4,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { TypographyP } from '@/components/typography/typography-p';
-import { TypographyLarge } from '@/components/typography/typography-large';
-
 import {
   Form,
   FormControl,
@@ -16,6 +11,11 @@ import {
   FormItem,
   FormMessage,
 } from '@/components/ui/form';
+
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { TypographyLarge } from '@/components/typography/typography-large';
+import { TypographyP } from '@/components/typography/typography-p';
 
 const formSchema = z.object({
   phone: z
@@ -40,6 +40,7 @@ const PhoneInput = ({
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     if (values.phone) {
+      // TODO: SEND PHONE NUMBER TO BACKEND
       setIsPhone(values.phone);
     }
   }
@@ -53,7 +54,7 @@ const PhoneInput = ({
         <div>Cozen Club</div>
       </TypographyLarge>
 
-      {/* Input */}
+      {/* Form */}
       <Form {...form}>
         <form
           className="relative flex h-full flex-col"
@@ -65,6 +66,7 @@ const PhoneInput = ({
               <TypographyP>Enter your phone number</TypographyP>
             </div>
 
+            {/* Phone Number Input */}
             <FormField
               control={form.control}
               name="phone"
@@ -83,9 +85,11 @@ const PhoneInput = ({
                     We will send you an one time password.
                   </TypographyP>
                 </FormItem>
-              )}></FormField>
+              )}
+            />
           </div>
 
+          {/* Next Step Button: OTP */}
           <div className="sticky bottom-9 mt-auto w-full">
             <Button size="xl" type="submit">
               Next

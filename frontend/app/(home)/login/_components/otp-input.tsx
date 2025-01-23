@@ -4,7 +4,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -18,6 +17,8 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from '@/components/ui/input-otp';
+
+import { Button } from '@/components/ui/button';
 import { TypographyP } from '@/components/typography/typography-p';
 import { TypographyLarge } from '@/components/typography/typography-large';
 
@@ -42,7 +43,7 @@ const OTPInput = ({
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    // TODO: Verify OTP
+    // TODO: Verify OTP and Redirect User to /dashboard
     console.log(data);
   }
 
@@ -74,7 +75,7 @@ const OTPInput = ({
                   size="sm"
                   type="button"
                   variant="outline">
-                  Change Number
+                  Change
                 </Button>
               </div>
             </div>

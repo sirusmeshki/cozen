@@ -1,9 +1,10 @@
 'use client';
 
-import { z } from 'zod';
-
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+
+import { CirclePlus } from 'lucide-react';
 
 import {
   Dialog,
@@ -21,12 +22,11 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
 import { addCollectionSchema } from './utils';
-
-import { CirclePlus } from 'lucide-react';
 
 const AddCollection = () => {
   const form = useForm<z.infer<typeof addCollectionSchema>>({
@@ -40,6 +40,7 @@ const AddCollection = () => {
   });
 
   function onSubmit(values: z.infer<typeof addCollectionSchema>) {
+    // TODO: Add Collection
     console.log(values);
   }
 

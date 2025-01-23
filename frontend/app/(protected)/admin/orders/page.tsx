@@ -1,4 +1,5 @@
 import { DataTable } from '@/components/data-table';
+
 import AddOrder from './add-order';
 import { columns, orders } from './columns';
 
@@ -7,7 +8,7 @@ const OrderPage = () => {
     <section className="flex w-full flex-col gap-4">
       <nav className="flex w-full justify-between gap-2">
         <h1 className="text-3xl font-extrabold">Orders</h1>
-        <div className="space-x-2">
+        <div className="flex flex-wrap justify-end gap-2">
           {/* Actions */}
           <AddOrder />
         </div>

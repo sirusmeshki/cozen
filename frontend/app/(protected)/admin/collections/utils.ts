@@ -2,6 +2,13 @@
 
 import { z } from 'zod';
 
+export type Collection = {
+  id: string;
+  name: string;
+  sizes: string;
+  collabration_with: string;
+};
+
 export const addCollectionSchema = z.object({
   id: z.string().min(1, 'Name is required'),
   name: z.string().min(1, 'Name is required'),

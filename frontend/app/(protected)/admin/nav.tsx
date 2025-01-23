@@ -1,10 +1,11 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
-import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+
 const Nav = () => {
   const pages = ['collections', 'users', 'orders'];
   const currentPath = usePathname();
@@ -23,7 +24,7 @@ const Nav = () => {
             variant="outline"
             key={index}
             asChild>
-            <Link href={page}>{page}</Link>
+            <Link href={`/admin/${page}`}>{page}</Link>
           </Button>
         );
       })}

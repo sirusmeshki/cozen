@@ -1,19 +1,11 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
-import { ColumnDef } from '@tanstack/react-table';
 import { ArrowUpDown } from 'lucide-react';
 
-export type Order = {
-  id: string;
-  user_name: string;
-  user_last_name: string;
-  user_number: string;
-  tshirt_number: string;
-  tshirt_size: string;
-  tshirt_name: string;
-  order_date: string;
-};
+import { Button } from '@/components/ui/button';
+import { ColumnDef } from '@tanstack/react-table';
+
+import { Order } from './utils';
 
 export const orders: Order[] = [
   {
