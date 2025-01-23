@@ -1,16 +1,17 @@
 from flask import Blueprint, request, jsonify
 from db import db
-from .utils import fieldcheck,allowed_file,create_upload_path
+from .utils import fieldcheck,allowed_file,create_upload_path,save_uploaded_image
 import logging
 from flask_jwt_extended import  jwt_required ,get_jwt_identity,get_jwt
 from werkzeug.utils import secure_filename
 import os
 from datetime import datetime
+from config import Config
 
 tshirts_routes = Blueprint('tshirts', __name__)
 
-UPLOAD_FOLDER = db_path = os.path.join(os.path.dirname(__file__), "uploads")
-STATIC_URL_PATH = "/static/uploads/tshirts" 
+UPLOAD_FOLDER = Config.UPLOAD_FOLDER
+STATIC_URL_PATH ='/static/photos' 
 print(f"upload folder is {UPLOAD_FOLDER}")
 
 
@@ -35,10 +36,8 @@ def add_shirt():
         return jsonify({"message": "No selected file"}), 400
     
     if file and allowed_file(file.filename):
-        upload_path = create_upload_path()
-        filename = secure_filename(file.filename)
-        file.save(os.path.join(upload_path, filename))
-        image_url = os.path.join(STATIC_URL_PATH, str(datetime.now().year), str(datetime.now().month), str(datetime.now().day), filename)
+        image_url=save_uploaded_image(file.read(), original_extension=".jpg")
+        print(f"image url is {image_url}")
     else:
         return jsonify({"message": "Invalid file type"}), 400
 

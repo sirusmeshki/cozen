@@ -8,8 +8,8 @@ from config import Config
 
 import os 
 
-UPLOAD_FOLDER = r"D:\Downloads\projects\finalcozen\cozen\backend\routes\uploads"
-STATIC_URL_PATH = "/static/uploads"
+UPLOAD_FOLDER = Config.UPLOAD_FOLDER
+STATIC_URL_PATH ='/static/photos'
 
 
 users_routes = Blueprint('users', __name__)
@@ -114,12 +114,14 @@ def get_user_tshirts():
         WHERE o.owner_id = ?
         """, id)
 
-        for tshirt in tshirt_data:
-            # Construct the relative URL correctly
-            relative_path = os.path.relpath(tshirt['tshirt_image_path'], UPLOAD_FOLDER).replace("\\", "/")
-            tshirt['tshirt_image_url'] = f"{STATIC_URL_PATH}/{relative_path}"
-            tshirt['formatted_number'] = f"{tshirt['tshirt_number']} of {tshirt['tshirt_max_number']}"
-            del tshirt['tshirt_image_path']  # Remove the file path from the response
+        for i in tshirt_data:
+           
+            Tshirt_image_path = i['tshirt_image_path']
+            i['tshirt_image_url'] = f"{Tshirt_image_path}" 
+            i['formatted_number'] = f"{i['tshirt_number']}/{i['tshirt_max_number']}"
+
+            # Remove the file path field if not needed
+            del i['tshirt_image_path']
 
         response = {
             "user": user_data[0] if user_data else {},
