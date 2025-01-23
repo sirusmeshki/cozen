@@ -126,12 +126,3 @@ def logout():
     response = jsonify({"msg": "logout successful"})
     unset_jwt_cookies(response)  
     return response
-
-
-
-@auth_routes.route('/api/logout',methods=['POST'])
-def logout():
-    response = jsonify({"msg": "logout successful"})
-    unset_jwt_cookies(response)  
-    return response
-

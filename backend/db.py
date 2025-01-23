@@ -1,6 +1,6 @@
 from cs50 import SQL
 
-db = SQL("sqlite:///backend/cozen.db")
+db = SQL("sqlite:///cozen.db")
 
 
 def safequery(query,*params):
