@@ -13,6 +13,7 @@ load_dotenv()
 app_secret_key = os.getenv("APP_SECRET_KEY")
 jwt_secret_key = os.getenv("JWT_SECRET_KEY")
 print(f'test is = {app_secret_key,jwt_secret_key}')
+print(f'test is = {app_secret_key,jwt_secret_key}')
 
 app = Flask(__name__)
 app.config.from_object(Config) 

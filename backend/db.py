@@ -1,7 +1,9 @@
+import os
 from cs50 import SQL
 
-db = SQL("sqlite:///cozen.db")
+db_path = os.path.join(os.path.dirname(__file__), "cozen.db")
 
+db=SQL(f"sqlite:///{db_path}")
 
 def safequery(query,*params):
     try:
