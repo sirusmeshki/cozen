@@ -27,7 +27,13 @@ const FormSchema = z.object({
   }),
 });
 
-const OTPInput = ({ isPhone }: { isPhone: string }) => {
+const OTPInput = ({
+  isPhone,
+  setIsPhone,
+}: {
+  isPhone: string;
+  setIsPhone: React.Dispatch<React.SetStateAction<string>>;
+}) => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -58,10 +64,19 @@ const OTPInput = ({ isPhone }: { isPhone: string }) => {
             {/* SubTitle */}
             <div className="mb-4 -space-y-1">
               <TypographyLarge>Login</TypographyLarge>
-              <TypographyP>
-                Code has been sent to{' '}
-                <span className="font-extrabold">{isPhone}</span>
-              </TypographyP>
+              <div className="flex items-center justify-between">
+                <TypographyP>
+                  Code has been sent to{' '}
+                  <span className="font-extrabold">{isPhone}</span>
+                </TypographyP>
+                <Button
+                  onClick={() => setIsPhone('')}
+                  size="sm"
+                  type="button"
+                  variant="outline">
+                  Change Number
+                </Button>
+              </div>
             </div>
 
             <FormField
@@ -82,6 +97,7 @@ const OTPInput = ({ isPhone }: { isPhone: string }) => {
                   <div className="flex justify-between">
                     <TypographyP>Didn’t get OTP Code ?</TypographyP>
                     <Button
+                      type="button"
                       className="p-0 uppercase"
                       variant="link"
                       size={'sm'}>
@@ -96,7 +112,9 @@ const OTPInput = ({ isPhone }: { isPhone: string }) => {
           </div>
 
           <div className="sticky bottom-9 mt-auto w-full">
-            <Button type="submit">Next</Button>
+            <Button size="xl" type="submit">
+              Next
+            </Button>
           </div>
         </form>
       </Form>

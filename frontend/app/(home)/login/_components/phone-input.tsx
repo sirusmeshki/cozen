@@ -50,7 +50,7 @@ const PhoneInput = ({
       <TypographyLarge>
         <div>Hi</div>
         <div>Welcome to</div>
-        <div>Cozen</div>
+        <div>Cozen Club</div>
       </TypographyLarge>
 
       {/* Input */}
@@ -71,7 +71,12 @@ const PhoneInput = ({
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input placeholder="09" {...field} />
+                    <Input
+                      type="text"
+                      className="h-20 px-5 text-4xl font-extrabold"
+                      placeholder="09"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                   <TypographyP>
@@ -82,7 +87,9 @@ const PhoneInput = ({
           </div>
 
           <div className="sticky bottom-9 mt-auto w-full">
-            <Button type="submit">Next</Button>
+            <Button size="xl" type="submit">
+              Next
+            </Button>
           </div>
         </form>
       </Form>

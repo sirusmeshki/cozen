@@ -13,7 +13,7 @@ const LoginPage = () => {
       {!isPhone ? (
         <PhoneInput setIsPhone={setIsPhone} />
       ) : (
-        <OTPInput isPhone={isPhone} />
+        <OTPInput isPhone={isPhone} setIsPhone={setIsPhone} />
       )}
     </>
   );

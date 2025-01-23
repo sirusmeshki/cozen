@@ -24,7 +24,7 @@ const HomePage = () => {
 
       {/* Login Button */}
       <div className="sticky bottom-9">
-        <Button asChild>
+        <Button asChild size="xl">
           <Link href="/login">Login</Link>
         </Button>
       </div>
