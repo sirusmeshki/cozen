@@ -118,7 +118,7 @@ def get_user_tshirts():
            
             Tshirt_image_path = i['tshirt_image_path']
             i['tshirt_image_url'] = f"{Tshirt_image_path}" 
-            i['formatted_number'] = f"{i['tshirt_number']}/{i['tshirt_max_number']}"
+            i['tshirt_number'] = f"{i['tshirt_number']}/{i['tshirt_max_number']}"
 
             # Remove the file path field if not needed
             del i['tshirt_image_path']

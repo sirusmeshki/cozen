@@ -35,12 +35,6 @@ def add_shirt():
     if file.filename == '':
         return jsonify({"message": "No selected file"}), 400
     
-    if file and allowed_file(file.filename):
-        image_url=save_uploaded_image(file.read(), original_extension=".jpg")
-        print(f"image url is {image_url}")
-    else:
-        return jsonify({"message": "Invalid file type"}), 400
-
 
     tshirt_id=data["tshirt_id"]
     name = data["name"]
@@ -52,6 +46,19 @@ def add_shirt():
         tshirt_exists=db.execute("select * from tshirts where name = ? " , name)
         if tshirt_exists:
             return jsonify({"message":"tshirt already exists"})
+        
+        tshirt_id_exists=db.execute("select * from tshirts where id = ? " , tshirt_id)
+        if tshirt_id_exists:
+            return jsonify({"message":"tshirt id already exists"})
+        
+
+        if file and allowed_file(file.filename):
+            image_url=save_uploaded_image(file.read(), original_extension=".jpg")
+            print(f"image url is {image_url}")
+        else:
+            return jsonify({"message": "Invalid file type"}), 400
+
+
         db.execute("INSERT INTO Tshirts (id, name, sizes, collabration_with, image_path,max_number) VALUES (?, ?, ?, ?, ?,?)",
                    tshirt_id, name, sizes, collabration_with, image_url,max_number)
     except Exception as e:

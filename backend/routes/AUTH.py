@@ -7,7 +7,9 @@ from db import db
 import logging
 from datetime import datetime,timedelta
 import os
+from flask_recaptcha import ReCaptcha
 
+recaptcha = ReCaptcha()
 load_dotenv()
 
 auth_routes = Blueprint('auth', __name__)
@@ -15,18 +17,63 @@ auth_routes = Blueprint('auth', __name__)
 
 smsapi=os.getenv("smsapi")
 
+
+@auth_routes.route('/api/resendsms', methods=['POST'])
+def resend_sms_code():
+    data=request.get_json()
+    if not data:
+        return jsonify({"message":"data is required"})
+
+    field_check=fieldcheck(data,"phone_number","recaptcha_response")
+
+    if field_check:
+        return field_check
+    
+    phone_number=data["phone_number"]
+    recaptcha_response = data.get("recaptcha_response")
+
+    if not recaptcha_response or not recaptcha_response.verify():
+        return jsonify({"message": "Invalid reCAPTCHA"}), 400
+    
+    user_exists=db.execute("select * from users where phone_number = ? " , phone_number)
+    if not user_exists:
+        return jsonify({"error":"user doesnt exists"}),404
+    try:
+
+        code =db.execute("select code from verificationcode where phone_number = ? order by created_at desc limit 1",phone_number)
+        if not code:
+            code = generate_verification_code()
+            expdate = datetime.utcnow() + timedelta(minutes=5)
+            send_verification_code(phone_number,smsapi,code)
+            db.execute("insert into verificationcode (phone_number,code,expires_at) VALUES (?,?,?) ",phone_number,code,expdate)
+            return jsonify({"message":f"Verification code sent: {'code'} to {phone_number}"})
+        else:
+            send_verification_code(phone_number,smsapi,code[0]["code"])
+            return jsonify({"message":f"Verification code sent: {code[0]['code']} to {phone_number}"})  
+    except Exception as e:
+        logging.ERROR(e)
+        return jsonify({"message":"an unexpected error occured"}),50
+
+
+
+
 @auth_routes.route('/api/sendsms', methods=['POST'])
 def send_sms_code():
     data=request.get_json()
     if not data:
         return jsonify({"message":"data is required"})
 
-    field_check=fieldcheck(data,"phone_number")
+    field_check=fieldcheck(data,"phone_number","recaptcha_response")
 
     if field_check:
         return field_check
 
     phone_number=data["phone_number"]
+    recaptcha_response = data.get("recaptcha_response")
+
+    if not recaptcha_response or not recaptcha_response.verify():
+        return jsonify({"message": "Invalid reCAPTCHA"}), 400
+    
     user_exists=db.execute("select * from users where phone_number = ? " , phone_number)
     if not user_exists:
         return jsonify({"error":"user doesnt exists"}),404
