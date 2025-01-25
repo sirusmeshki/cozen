@@ -107,8 +107,8 @@ def get_user_tshirts():
             t.image_path AS tshirt_image_path,
             t.max_number AS tshirt_max_number,
             o.Tshirt_number AS tshirt_number,
-            o.Tshirt_size,
-            o.order_date
+            o.Tshirt_size
+    
         FROM orders o
         JOIN Tshirts t ON o.tshirt_id = t.id
         WHERE o.owner_id = ?
@@ -118,7 +118,7 @@ def get_user_tshirts():
            
             Tshirt_image_path = i['tshirt_image_path']
             i['tshirt_image_url'] = f"{Tshirt_image_path}" 
-            i['tshirt_number'] = f"{i['tshirt_number']}/{i['tshirt_max_number']}"
+            i['tshirt_number'] = i['tshirt_number']
 
             # Remove the file path field if not needed
             del i['tshirt_image_path']
