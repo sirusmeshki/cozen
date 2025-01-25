@@ -8,7 +8,7 @@ import logging
 from datetime import datetime,timedelta
 import os
 from flask_recaptcha import ReCaptcha
-
+from flask_cors import cross_origin
 
 
 
@@ -108,6 +108,7 @@ def send_sms_code():
 
 
 @auth_routes.route('/api/verifysms', methods=['POST'])
+@cross_origin() 
 def verify_sms_code():
     data=request.get_json()
 
