@@ -39,7 +39,9 @@ app.config['JWT_REFRESH_TOKEN_EXPIRES'] = timedelta(days=15)
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s', filename='app.log', filemode="w")
 jwt = JWTManager(app)
-CORS(app)
+
+
+CORS(app, origins=["http://localhost:3000"])
 
 create_tables()
 
