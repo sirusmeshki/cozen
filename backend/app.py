@@ -10,7 +10,7 @@ from config import Config
 from flask_recaptcha import ReCaptcha
 from threading import Thread
 from celery_conf import cleanup_expired_codes
-
+from flask_cors import CORS
 
 UPLOAD_FOLDER = Config.UPLOAD_FOLDER
 STATIC_URL_PATH = '/static/photos'
@@ -39,7 +39,7 @@ app.config['JWT_REFRESH_TOKEN_EXPIRES'] = timedelta(days=15)
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s', filename='app.log', filemode="w")
 jwt = JWTManager(app)
-
+CORS(app)
 
 create_tables()
 
