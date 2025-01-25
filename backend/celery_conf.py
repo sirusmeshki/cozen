@@ -14,4 +14,4 @@ def cleanup_expired_codes():
         else:
             print("No expired verification codes found")
         
-        time.sleep(3600) 
+        time.sleep(600) 

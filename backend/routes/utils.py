@@ -4,7 +4,7 @@ from datetime import datetime
 import os 
 from config import Config
 import stat
-
+import re
 UPLOAD_FOLDER = Config.UPLOAD_FOLDER
 
 from datetime import datetime
@@ -52,3 +52,14 @@ def save_uploaded_image(file_content, original_extension=".jpg"):
         print(f"Image rl to {relative_path}")
         return relative_path
    
+
+
+
+def sanitize_phone_number(phone_number):
+    # Remove any non-digit characters
+    sanitized= re.sub(r'\D', '', phone_number)
+    return sanitized if len(sanitized) == 11 else None
+
+def validate_phone_number(phone_number):
+    # Ensure the phone number is in the expected format (e.g., 10 digits)
+    return re.match(r'^\d{10}$', phone_number)

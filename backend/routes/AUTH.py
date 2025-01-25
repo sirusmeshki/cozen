@@ -1,13 +1,16 @@
 from flask import jsonify , request,Blueprint
 from flask_jwt_extended import create_access_token, set_access_cookies, jwt_required ,get_jwt_identity,unset_jwt_cookies, create_refresh_token,set_refresh_cookies
 from dotenv import load_dotenv
-from .utils import fieldcheck
+from .utils import fieldcheck,sanitize_phone_number,validate_phone_number
 from smsir import send_verification_code,generate_verification_code
 from db import db
 import logging
 from datetime import datetime,timedelta
 import os
 from flask_recaptcha import ReCaptcha
+
+
+
 
 recaptcha = ReCaptcha()
 load_dotenv()
@@ -29,8 +32,13 @@ def resend_sms_code():
     if field_check:
         return field_check
     
-    phone_number=data["phone_number"]
+    phone_number=sanitize_phone_number(data["phone_number"])
     recaptcha_response = data.get("recaptcha_response")
+
+    
+    if not phone_number:
+        return jsonify({"message": "Invalid phone number format"}), 400
+
 
     if not recaptcha_response or not recaptcha_response.verify():
         return jsonify({"message": "Invalid reCAPTCHA"}), 400
@@ -68,8 +76,13 @@ def send_sms_code():
     if field_check:
         return field_check
 
-    phone_number=data["phone_number"]
+    phone_number=sanitize_phone_number(data["phone_number"])
     recaptcha_response = data.get("recaptcha_response")
+
+
+    if not phone_number:
+        return jsonify({"message": "Invalid phone number format"}), 400
+
 
     if not recaptcha_response or not recaptcha_response.verify():
         return jsonify({"message": "Invalid reCAPTCHA"}), 400
@@ -106,11 +119,16 @@ def verify_sms_code():
         return field_check
     
     entered_code=data["code"]
-    phone_number=data["phone_number"]
+    phone_number=sanitize_phone_number(data["phone_number"])
+    print(f"phone number is {phone_number}")
+
+    if not phone_number:
+        return jsonify({"message": "Invalid phone number format"}), 400
 
     print(entered_code)
     if not (phone_number and entered_code):
         return jsonify({"message": "Phone number and code are required"}), 400
+    
      
      
     #checkcode=db.execute("select * from verificationcode where phone_number = ? and code = ?",phone_number,entered_code)
