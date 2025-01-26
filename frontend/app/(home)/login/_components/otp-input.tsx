@@ -21,6 +21,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { TypographyP } from '@/components/typography/typography-p';
 import { TypographyLarge } from '@/components/typography/typography-large';
+import axios from 'axios';
 
 const FormSchema = z.object({
   pin: z.string().min(4, {
@@ -42,10 +43,29 @@ const OTPInput = ({
     },
   });
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
+  const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     // TODO: Verify OTP and Redirect User to /dashboard
-    console.log(data);
-  }
+
+    const res = {
+      phone_number: isPhone,
+      code: '2323',
+    };
+
+    try {
+      const response = await axios.post(
+        'http://127.0.0.1:5000/api/verifysms',
+        res,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      console.log('Success:', response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <>

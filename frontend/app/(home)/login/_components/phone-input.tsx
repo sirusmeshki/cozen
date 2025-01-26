@@ -1,8 +1,12 @@
 'use client';
 
+import { useState } from 'react';
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import axios from 'axios';
+import { ReCaptcha, useReCaptcha } from 'next-recaptcha-v3';
 
 import {
   Form,
@@ -17,33 +21,46 @@ import { Input } from '@/components/ui/input';
 import { TypographyLarge } from '@/components/typography/typography-large';
 import { TypographyP } from '@/components/typography/typography-p';
 
-const formSchema = z.object({
-  phone: z
-    .string()
-    .min(2, { message: 'Please enter your phone number' })
-    .regex(/^09\d{9}$/, {
-      message: 'Phone Number is not valid',
-    }),
-});
+import { FormSchema } from './definitions';
 
 const PhoneInput = ({
   setIsPhone,
 }: {
   setIsPhone: React.Dispatch<React.SetStateAction<string>>;
 }) => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const [isLoading, setIsLoading] = useState(false);
+  const { executeRecaptcha } = useReCaptcha();
+
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
     defaultValues: {
       phone: '',
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    if (values.phone) {
-      // TODO: SEND PHONE NUMBER TO BACKEND
+  const onSubmit = async (values: z.infer<typeof FormSchema>) => {
+    setIsLoading(true);
+    setIsPhone(values.phone);
+
+    const token = await executeRecaptcha('form_submit');
+    const res = {
+      phone_number: values.phone,
+      token,
+    };
+
+    try {
+      await axios.post('http://127.0.0.1:5000/api/sendsms', res, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
       setIsPhone(values.phone);
     }
-  }
+  };
 
   return (
     <>
@@ -91,7 +108,7 @@ const PhoneInput = ({
 
           {/* Next Step Button: OTP */}
           <div className="sticky bottom-9 mt-auto w-full">
-            <Button size="xl" type="submit">
+            <Button disabled={isLoading} size="xl" type="submit">
               Next
             </Button>
           </div>

@@ -34,14 +34,36 @@ const AddCollection = () => {
     defaultValues: {
       id: '',
       name: '',
+      max_number: '',
       sizes: '',
       collabration_with: '',
+      image: undefined,
     },
   });
 
   function onSubmit(values: z.infer<typeof addCollectionSchema>) {
-    // TODO: Add Collection
-    console.log(values);
+    const formData = new FormData();
+
+    // Add text fields
+    formData.append('id', values.id || '');
+    formData.append('name', values.name || '');
+    formData.append('sizes', values.sizes || '');
+    formData.append('collabration_with', values.collabration_with || '');
+
+    // Add the file (ensure the file exists in the form state)
+    if (values.image) {
+      formData.append('image', values.image);
+    } else {
+      console.error('No file selected');
+      return;
+    }
+
+    console.log(formData);
+
+    // Log FormData for debugging
+    for (const [key, value] of formData.entries()) {
+      console.log(`${key}:`, value);
+    }
   }
 
   return (
@@ -98,12 +120,49 @@ const AddCollection = () => {
               />
               <FormField
                 control={form.control}
+                name="max_number"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Max Number</FormLabel>
+                    <FormControl>
+                      <Input placeholder="100" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
                 name="collabration_with"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Collabration</FormLabel>
                     <FormControl>
                       <Input placeholder="3Gool" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="image"
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Image</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Picture"
+                        type="file"
+                        accept="image/*, application/pdf"
+                        onChange={(event) => {
+                          if (event.target.files && event.target.files[0]) {
+                            field.onChange(event.target.files[0]);
+                          }
+                        }}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

@@ -1,10 +1,20 @@
 import { z } from 'zod';
 
+export type UserCollection = {
+  name: string;
+  collection_number: string;
+  user_number: string;
+  max_number: string;
+  image_path: string;
+};
+
 export type Collection = {
   id: string;
   name: string;
   sizes: string;
   collabration_with: string;
+  max_number: string;
+  image_path: string;
 };
 
 export const addCollectionSchema = z.object({
@@ -22,3 +32,13 @@ export const deleteCollectionSchema = z.object({
   id: z.string().min(1, 'Name is required'),
   name: z.string().min(1, 'Name is required'),
 });
+
+export const collections: UserCollection[] = [
+  {
+    name: 'Flying Dreams',
+    collection_number: '1',
+    user_number: '40',
+    max_number: '100',
+    image_path: '/two.png',
+  },
+];

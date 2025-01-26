@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import Nav from './nav';
+import CozenLogo from '@/app/assets/icon/cozen-logo';
+import { ModeToggle } from '@/components/mode-toggle';
 
 export const metadata: Metadata = {
   title: 'C⨀ZEN | PANEL',
@@ -12,9 +14,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <main>
-      <Nav />
-      {children}
-    </main>
+    <>
+      <header className="flex items-center justify-between">
+        <CozenLogo />
+        <ModeToggle />
+      </header>
+      <main>
+        <Nav />
+
+        {children}
+      </main>
+    </>
   );
 }

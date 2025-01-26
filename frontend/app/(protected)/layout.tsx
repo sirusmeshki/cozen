@@ -26,11 +26,6 @@ export default function RootLayout({
         className={cn(
           'mx-auto flex h-full flex-col gap-3 p-3 xs:gap-6 xs:p-6 sm:gap-9 sm:p-9'
         )}>
-        <header className="flex items-center justify-between">
-          <CozenLogo />
-          <ModeToggle />
-        </header>
-
         {children}
       </main>
     </ThemeProvider>
