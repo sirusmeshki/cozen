@@ -9,9 +9,9 @@ from datetime import datetime,timedelta
 import os
 from flask_recaptcha import ReCaptcha
 from flask_cors import cross_origin
+import requests
 
-
-
+recsecret_key=os.getenv("RECAPTCHA_PRIVATE_KEY")
 recaptcha = ReCaptcha()
 load_dotenv()
 
@@ -40,7 +40,7 @@ def resend_sms_code():
         return jsonify({"message": "Invalid phone number format"}), 400
 
 
-    if not recaptcha_response or not recaptcha_response.verify():
+    if not recaptcha_response:
         return jsonify({"message": "Invalid reCAPTCHA"}), 400
     
     user_exists=db.execute("select * from users where phone_number = ? " , phone_number)
@@ -84,21 +84,47 @@ def send_sms_code():
         return jsonify({"message": "Invalid phone number format"}), 400
 
 
-    if not recaptcha_response or not recaptcha_response.verify():
+    if not recaptcha_response :
         return jsonify({"message": "Invalid reCAPTCHA"}), 400
     
-    user_exists=db.execute("select * from users where phone_number = ? " , phone_number)
+     
+    secret_key = recsecret_key
+    verify_url = "https://www.google.com/recaptcha/api/siteverify"
+    recaptcha_data = {
+        'secret': secret_key,
+        'response': recaptcha_response
+    }
+
+   
+    recaptcha_verification = requests.post(verify_url, data=recaptcha_data)
+    recaptcha_result = recaptcha_verification.json()
+
+    print(f"reCAPTCHA result: {recaptcha_result}")
+
+    if not recaptcha_result.get('success'):
+        return jsonify({"message": "Invalid reCAPTCHA"}), 400
+
+    user_exists = db.execute("SELECT * FROM users WHERE phone_number = ?", phone_number)
     if not user_exists:
-        return jsonify({"error":"user doesnt exists"}),404
-    code = generate_verification_code()
+        return jsonify({"error": "User doesn't exist"}), 404
+
     try:
-        expdate = datetime.now() + timedelta(minutes=5)
-        send_verification_code(phone_number,smsapi,code)
-        db.execute("insert into verificationcode (phone_number,code,expires_at) VALUES (?,?,?) ",phone_number,code,expdate)
-        return jsonify({"message":f"Verification code sent: {'code'} to {phone_number}"})
+       
+        code = db.execute("SELECT code FROM verificationcode WHERE phone_number = ? ORDER BY created_at DESC LIMIT 1", phone_number)
+        if not code:
+            
+            code = generate_verification_code()
+            expdate = datetime.utcnow() + timedelta(minutes=5)
+            send_verification_code(phone_number, smsapi, code)
+            db.execute("INSERT INTO verificationcode (phone_number, code, expires_at) VALUES (?, ?, ?)", phone_number, code, expdate)
+            return jsonify({"message": f"Verification code sent: {code} to {phone_number}"})
+        else:
+            
+            send_verification_code(phone_number, smsapi, code[0]["code"])
+            return jsonify({"message": f"Verification code sent: {code[0]['code']} to {phone_number}"})
     except Exception as e:
-        logging.ERROR(e)
-        return jsonify({"message":"an unexpected error occured"}),500
+        logging.error(f"Unexpected error: {e}")
+        return jsonify({"message": "An unexpected error occurred"}), 500
         
 
 
